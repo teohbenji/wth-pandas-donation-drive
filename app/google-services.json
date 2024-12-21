@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "326974152744",
+    "project_id": "what-the-hack-2627e",
+    "storage_bucket": "what-the-hack-2627e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:326974152744:android:1b2e99396e3b6afa4d551d",
+        "android_client_info": {
+          "package_name": "com.example.donation_drive_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIEQbJu9sSpbvM1zpWouJ5kUyJVnuhVWE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
