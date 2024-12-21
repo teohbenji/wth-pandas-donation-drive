@@ -51,6 +51,7 @@ public class CatalogueAdapter extends RecyclerView.Adapter<CatalogueAdapter.View
         holder.textViewItem1Category.setText(item1.getCategory());
         holder.textViewItem1Date.setText(sdf.format(item1.getUploadTime()));
         Glide.with(context).load(R.drawable.kid_bicycle).into(holder.imageViewItem1);
+        //later change to get directly from the backend url
 
         // Check if second item exists
         if (index2 < itemsArrayList.size()) {
@@ -60,6 +61,7 @@ public class CatalogueAdapter extends RecyclerView.Adapter<CatalogueAdapter.View
             holder.textViewItem2Category.setText(item2.getCategory());
             holder.textViewItem2Date.setText(sdf.format(item2.getUploadTime()));
             Glide.with(context).load(R.drawable.ipad).into(holder.imageViewItem2);
+            //later change to get directly from the backendurl
         } else {
             // Hide the second card if there is no second item
             holder.cardViewItem2.setVisibility(View.INVISIBLE);

@@ -13,7 +13,7 @@ public class Item {
     private String status;
     private int reservedUserId;
 
-    public Item(int id, String hostName, String name,
+    public Item(int id, String name, String hostName,
                 String photoSource, Date uploadTime,
                 String category, String description,
                 String status, int reservedUserId) {
