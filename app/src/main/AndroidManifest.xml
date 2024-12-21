@@ -29,6 +29,9 @@
         </activity>
         <activity android:name=".UserActivity"> </activity>
         <activity android:name=".HostOrgActivity"> </activity>
+        <activity
+            android:name=".ui.catalogue.ItemViewPage"
+            android:launchMode="singleTop" > </activity>
         <activity android:name=".ui.upload.UploadDetails"> </activity>
     </application>
 
