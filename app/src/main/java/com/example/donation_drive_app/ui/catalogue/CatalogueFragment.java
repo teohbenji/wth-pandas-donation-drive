@@ -18,7 +18,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 
 public class CatalogueFragment extends Fragment {
 
@@ -48,6 +51,28 @@ public class CatalogueFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         fetchItemsFromFirebase();
+
+        // sort list by date from latest to earliest date
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy");
+
+        itemsArrayList.sort(new Comparator<Item>() {
+            @Override
+            public int compare(Item item1, Item item2) {
+                try {
+                    // Parse uploadTime strings into Date objects
+                    Date date1 = sdf.parse(item1.getUploadTime());
+                    Date date2 = sdf.parse(item2.getUploadTime());
+
+                    // Return comparison result in reverse order (latest to earliest)
+                    assert date2 != null;
+                    return date2.compareTo(date1);
+                } catch (Exception e) {
+                    // Handle potential parsing exceptions
+                    e.printStackTrace();
+                    return 0; // Default return value in case of error
+                }
+            }
+        });
 
         return rootView;
     }
