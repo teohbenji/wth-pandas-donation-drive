@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -13,15 +14,24 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.donation_drive_app.HostOrgActivity;
 import com.example.donation_drive_app.R;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
 import java.io.IOException;
 
 public class UploadDetails extends AppCompatActivity {
+    private FirebaseStorage storage;
+    private StorageReference storageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_upload_details);
+
+        // Initialize Firebase Storage
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
 
         // Handle receiving data from the previous fragment if needed
         String imagePath = getIntent().getStringExtra("image_path"); // Example of passing data
@@ -57,8 +67,34 @@ public class UploadDetails extends AppCompatActivity {
         // Set up the confirm button
         findViewById(R.id.confirmButton).setOnClickListener(view -> {
             // Perform the confirm action here
-            // Example: Show a toast message and finish the activity
-            Toast.makeText(UploadDetails.this, "Details Confirmed!", Toast.LENGTH_SHORT).show();
+            // Check if the image path is valid
+            if (imagePath != null) {
+                // Convert the image file path to a Uri (if it's a file)
+                Uri fileUri = Uri.fromFile(new File(imagePath));
+
+                // Create a reference to the Firebase Storage location
+                StorageReference imageRef = storageRef.child("images/" + fileUri.getLastPathSegment()); // Save in 'images' folder
+
+                // Upload the image to Firebase Storage
+                imageRef.putFile(fileUri)
+                        .addOnSuccessListener(taskSnapshot -> {
+                            // Successfully uploaded
+                            Toast.makeText(UploadDetails.this, "Image Uploaded Successfully!", Toast.LENGTH_SHORT).show();
+
+                            // Optionally, get the URL of the uploaded image
+                            imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                String imageUrl = uri.toString();
+                                // You can save this URL in your database or use it elsewhere in the app
+                            });
+                        })
+                        .addOnFailureListener(e -> {
+                            // Handle the failure
+                            Toast.makeText(UploadDetails.this, "Upload Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        });
+            } else {
+                Toast.makeText(UploadDetails.this, "No image to upload", Toast.LENGTH_SHORT).show();
+            }
+//            Toast.makeText(UploadDetails.this, "Details Confirmed!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, HostOrgActivity.class);
             intent.putExtra("navigate_to_fragment", true);
             startActivity(intent);
