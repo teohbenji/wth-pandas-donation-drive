@@ -1,6 +1,7 @@
 package com.example.donation_drive_app.ui.upload;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,10 +24,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
 import android.widget.Toast;
 
+import com.example.donation_drive_app.R;
 import com.example.donation_drive_app.databinding.FragmentUploadBinding;
 import com.google.common.util.concurrent.ListenableFuture;
 
@@ -96,8 +100,20 @@ public class UploadsFragment extends Fragment {
         });
 
         binding.nextButton.setOnClickListener(v -> {
-            deleteTempFile();
-            saveImage();
+//            deleteTempFile();
+//            saveImage();
+            Intent intent = new Intent(getContext(), UploadDetails.class);
+            // Optionally, pass any data to the new activity
+            if (capturedBitmap != null) {
+                File tempFile = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_image.jpg");
+                intent.putExtra("image_path", tempFile.getAbsolutePath());
+            }
+
+            // Start the new activity
+            startActivity(intent);
+
+            // Optionally, finish the current activity if you no longer need the fragment
+            requireActivity().finish();
         });
 
 
