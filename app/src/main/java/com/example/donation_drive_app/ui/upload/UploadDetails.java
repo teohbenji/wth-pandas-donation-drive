@@ -7,14 +7,19 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.donation_drive_app.HostOrgActivity;
 import com.example.donation_drive_app.R;
+import com.example.donation_drive_app.api.Item;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 public class UploadDetails extends AppCompatActivity {
 
@@ -54,10 +59,19 @@ public class UploadDetails extends AppCompatActivity {
             finish();
         });
 
+        final TextView nameEditText = findViewById(R.id.nameEditText);
+        final TextView categoryEditText = findViewById(R.id.categoryEditText);
+        final TextView descriptionEditText = findViewById(R.id.descriptionEditText);
+
         // Set up the confirm button
         findViewById(R.id.confirmButton).setOnClickListener(view -> {
-            // Perform the confirm action here
-            // Example: Show a toast message and finish the activity
+            // retrieve values from EditTexts
+            final String itemName = nameEditText.getText().toString();
+            final String itemCategory = categoryEditText.getText().toString();
+            final String itemDescription = descriptionEditText.getText().toString();
+
+            uploadItemsToFirebase(itemName, itemCategory, itemDescription);
+
             Toast.makeText(UploadDetails.this, "Details Confirmed!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, HostOrgActivity.class);
             intent.putExtra("navigate_to_fragment", true);
@@ -65,6 +79,34 @@ public class UploadDetails extends AppCompatActivity {
             finish(); // Close the activity after confirmation
         });
     }
+
+    private void uploadItemsToFirebase(String itemName, String itemCategory, String itemDescription) {
+        // Get reference to the "items" node
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://what-the-hack-2627e-default-rtdb.asia-southeast1.firebasedatabase.app/");
+        DatabaseReference itemsRef = database.getReference("items");
+
+        // Create a new Item object
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy");
+        final String uploadTime = sdf.format(System.currentTimeMillis());
+        final String hostName = "Salvation Army";
+        final String photoString = "test.com";
+
+        final Item newItem = new Item(itemName, hostName, photoString, uploadTime, itemCategory, itemDescription, "available", "");
+
+        DatabaseReference newItemRef = itemsRef.push();
+
+        // push new item to Firebase
+        newItemRef.setValue(newItem)
+                .addOnSuccessListener(aVoid -> {
+                    // Handle success
+                    Toast.makeText(UploadDetails.this, "Item Added Successfully!", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    // Handle failure
+                    Toast.makeText(UploadDetails.this, "Failed to add item!", Toast.LENGTH_SHORT).show();
+                });
+    }
+
 
     // Method to get the image orientation from Exif data
     private int getImageOrientation(String imagePath) {

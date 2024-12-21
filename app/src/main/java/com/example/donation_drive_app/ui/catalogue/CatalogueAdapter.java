@@ -40,8 +40,6 @@ public class CatalogueAdapter extends RecyclerView.Adapter<CatalogueAdapter.View
         int index1 = position * 2;
         int index2 = index1 + 1;
 
-        // Define the date format
-
         // Display first item
         Item item1 = itemsArrayList.get(index1);
         holder.textViewItem1Name.setText(item1.getName());

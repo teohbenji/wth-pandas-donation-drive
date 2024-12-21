@@ -13,6 +13,8 @@ public class Item {
     private String status;
     private String reservedUserId;
 
+    public Item() {}
+
     public Item(String id, String name, String hostName,
                 String photoString, String uploadTime,
                 String category, String description,
@@ -28,7 +30,20 @@ public class Item {
         this.reservedUserId = reservedUserId;
     }
 
-    public Item() {}
+    // overloaded constructor without id for pushing new item to Firebase
+    public Item(String name, String hostName, String photoString,
+                String uploadTime, String category, String description,
+                String status, String reservedUserId) {
+        this.name = name;
+        this.hostName = hostName;
+        this.photoString = photoString;
+        this.uploadTime = uploadTime;
+        this.category = category;
+        this.description = description;
+        this.status = status;
+        this.reservedUserId = reservedUserId;
+    }
+
 
     public String getId() {
         return id;
