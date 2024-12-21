@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">donation_drive_app</string>
-    <string name="title_home">Home</string>
+    <string name="login_host_org">Host Org</string>
+    <string name="login_user">User</string>
+    <string name="title_analytics">Analytics</string>
+    <string name="title_catalogue">Catalogue</string>
     <string name="title_dashboard">Dashboard</string>
+    <string name="title_home">Home</string>
     <string name="title_notifications">Notifications</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_wishlist">Wishlist</string>
 </resources>
