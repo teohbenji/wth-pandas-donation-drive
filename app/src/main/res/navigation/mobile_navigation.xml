@@ -6,10 +6,16 @@
     app:startDestination="@+id/navigation_home">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.example.donation_drive_app.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_analytics"
+        android:name="com.example.donation_drive_app.ui.analytics.AnalyticsFragment"
+        android:label="@string/title_analytics"
+        tools:layout="@layout/fragment_analytics" />
+
+    <fragment
+        android:id="@+id/navigation_catalogue"
+        android:name="com.example.donation_drive_app.ui.catalogue.CatalogueFragment"
+        android:label="@string/title_catalogue"
+        tools:layout="@layout/fragment_catalogue" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
@@ -18,20 +24,26 @@
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.donation_drive_app.ui.home.HomeFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.donation_drive_app.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
 
     <fragment
-        android:id="@+id/navigation_analytics"
-        android:name="com.example.donation_drive_app.ui.notifications.NotificationsFragment"
-        android:label="Analytics"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_profile"
+        android:name="com.example.donation_drive_app.ui.profile.ProfileFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile" />
 
     <fragment
-        android:id="@+id/navigation_profile"
-        android:name="com.example.donation_drive_app.ui.notifications.NotificationsFragment"
-        android:label="Profile"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_wishlist"
+        android:name="com.example.donation_drive_app.ui.wishlist.WishlistFragment"
+        android:label="@string/title_wishlist"
+        tools:layout="@layout/fragment_wishlist" />
 </navigation>
