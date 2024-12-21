@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.donation_drive_app.R;
 import com.example.donation_drive_app.api.Item;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 
@@ -42,21 +43,37 @@ public class CatalogueAdapter extends RecyclerView.Adapter<CatalogueAdapter.View
 
         // Display first item
         Item item1 = itemsArrayList.get(index1);
+        String imagePath1 = item1.getPhotoString();
+        FirebaseStorage.getInstance().getReference(imagePath1)
+                .getDownloadUrl()
+                .addOnSuccessListener(uri -> {
+                    Glide.with(context)
+                            .load(uri.toString()) // Use the download URL
+                            .into(holder.imageViewItem1);
+                });
         holder.textViewItem1Name.setText(item1.getName());
         holder.textViewItem1HostName.setText(item1.getHostName());
         holder.textViewItem1Category.setText(item1.getCategory());
         holder.textViewItem1Date.setText(item1.getUploadTime());
-        Glide.with(context).load(R.drawable.kid_bicycle).into(holder.imageViewItem1);
+//        Glide.with(context).load(R.drawable.kid_bicycle).into(holder.imageViewItem1);
         //later change to get directly from the backend url
 
         // Check if second item exists
         if (index2 < itemsArrayList.size()) {
             Item item2 = itemsArrayList.get(index2);
+            String imagePath2 = item2.getPhotoString();
+            FirebaseStorage.getInstance().getReference(imagePath2)
+                    .getDownloadUrl()
+                    .addOnSuccessListener(uri -> {
+                        Glide.with(context)
+                                .load(uri.toString()) // Use the download URL
+                                .into(holder.imageViewItem2);
+                    });
             holder.textViewItem2Name.setText(item2.getName());
             holder.textViewItem2HostName.setText(item2.getHostName());
             holder.textViewItem2Category.setText(item2.getCategory());
             holder.textViewItem2Date.setText(item2.getUploadTime());
-            Glide.with(context).load(R.drawable.ipad).into(holder.imageViewItem2);
+//            Glide.with(context).load(R.drawable.ipad).into(holder.imageViewItem2);
             //later change to get directly from the backendurl
         } else {
             // Hide the second card if there is no second item
