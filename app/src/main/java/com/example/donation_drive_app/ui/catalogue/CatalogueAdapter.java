@@ -19,19 +19,21 @@ import java.util.ArrayList;
 
 
 public class CatalogueAdapter extends RecyclerView.Adapter<CatalogueAdapter.ViewHolder> {
+
     private final Context context;
     private final ArrayList<Item> itemsArrayList;
+    private final OnItemClickListener onItemClickListener;
 
     // Constructor
-    public CatalogueAdapter(Context context, ArrayList<Item> itemsArrayList) {
+    public CatalogueAdapter(Context context, ArrayList<Item> itemsArrayList, OnItemClickListener onItemClickListener) {
         this.context = context;
         this.itemsArrayList = itemsArrayList;
+        this.onItemClickListener = onItemClickListener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflate the layout for each item of recycler view.
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout_items_row, parent, false);
         return new ViewHolder(view);
     }
@@ -43,58 +45,32 @@ public class CatalogueAdapter extends RecyclerView.Adapter<CatalogueAdapter.View
 
         // Display first item
         Item item1 = itemsArrayList.get(index1);
-        String imagePath1 = item1.getPhotoString();
-        FirebaseStorage.getInstance().getReference(imagePath1)
-                .getDownloadUrl()
-                .addOnSuccessListener(uri -> {
-                    Glide.with(context)
-                            .load(uri.toString()) // Use the download URL
-                            .into(holder.imageViewItem1);
-                });
-        holder.textViewItem1Name.setText(item1.getName());
-        holder.textViewItem1HostName.setText(item1.getHostName());
-        holder.textViewItem1Category.setText(item1.getCategory());
-        holder.textViewItem1Date.setText(item1.getUploadTime());
-//        Glide.with(context).load(R.drawable.kid_bicycle).into(holder.imageViewItem1);
-        //later change to get directly from the backend url
+        holder.bind(item1, onItemClickListener);
 
         // Check if second item exists
         if (index2 < itemsArrayList.size()) {
             Item item2 = itemsArrayList.get(index2);
-            String imagePath2 = item2.getPhotoString();
-            FirebaseStorage.getInstance().getReference(imagePath2)
-                    .getDownloadUrl()
-                    .addOnSuccessListener(uri -> {
-                        Glide.with(context)
-                                .load(uri.toString()) // Use the download URL
-                                .into(holder.imageViewItem2);
-                    });
-            holder.textViewItem2Name.setText(item2.getName());
-            holder.textViewItem2HostName.setText(item2.getHostName());
-            holder.textViewItem2Category.setText(item2.getCategory());
-            holder.textViewItem2Date.setText(item2.getUploadTime());
-//            Glide.with(context).load(R.drawable.ipad).into(holder.imageViewItem2);
-            //later change to get directly from the backendurl
+            holder.bindSecondItem(item2, onItemClickListener);
+            holder.cardViewItem2.setVisibility(View.VISIBLE);
         } else {
-            // Hide the second card if there is no second item
             holder.cardViewItem2.setVisibility(View.INVISIBLE);
         }
     }
 
     @Override
     public int getItemCount() {
-        // Return the number of rows in the RecyclerView
         return (itemsArrayList.size() + 1) / 2;
     }
 
-    // ViewHolder class for initializing views such as TextView and ImageView
     public static class ViewHolder extends RecyclerView.ViewHolder {
+
         private final CardView cardViewItem1;
         private final ImageView imageViewItem1;
         private final TextView textViewItem1Name;
         private final TextView textViewItem1HostName;
         private final TextView textViewItem1Category;
         private final TextView textViewItem1Date;
+
         private final CardView cardViewItem2;
         private final ImageView imageViewItem2;
         private final TextView textViewItem2Name;
@@ -104,6 +80,7 @@ public class CatalogueAdapter extends RecyclerView.Adapter<CatalogueAdapter.View
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
             cardViewItem1 = itemView.findViewById(R.id.cardViewItem1);
             imageViewItem1 = itemView.findViewById(R.id.imageViewItem1);
             textViewItem1Name = itemView.findViewById(R.id.textViewItem1Name);
@@ -118,5 +95,46 @@ public class CatalogueAdapter extends RecyclerView.Adapter<CatalogueAdapter.View
             textViewItem2Category = itemView.findViewById(R.id.textViewItem2Category);
             textViewItem2Date = itemView.findViewById(R.id.textViewItem2Date);
         }
+
+        public void bind(Item item, OnItemClickListener listener) {
+            // Load item1 data
+            textViewItem1Name.setText(item.getName());
+            textViewItem1HostName.setText(item.getHostName());
+            textViewItem1Category.setText(item.getCategory());
+            textViewItem1Date.setText(item.getUploadTime());
+            cardViewItem1.setOnClickListener(v -> listener.onItemClick(item));
+
+            // Load image using Glide
+            String imagePath1 = item.getPhotoString();
+            FirebaseStorage.getInstance().getReference(imagePath1)
+                    .getDownloadUrl()
+                    .addOnSuccessListener(uri -> Glide.with(itemView.getContext())
+                            .load(uri.toString())
+                            .into(imageViewItem1)
+                    );
+        }
+
+        public void bindSecondItem(Item item, OnItemClickListener listener) {
+            // Load item2 data
+            textViewItem2Name.setText(item.getName());
+            textViewItem2HostName.setText(item.getHostName());
+            textViewItem2Category.setText(item.getCategory());
+            textViewItem2Date.setText(item.getUploadTime());
+            cardViewItem2.setOnClickListener(v -> listener.onItemClick(item));
+
+            // Load image using Glide
+            String imagePath2 = item.getPhotoString();
+            FirebaseStorage.getInstance().getReference(imagePath2)
+                    .getDownloadUrl()
+                    .addOnSuccessListener(uri -> Glide.with(itemView.getContext())
+                            .load(uri.toString())
+                            .into(imageViewItem2));
+        }
+    }
+
+    // Click listener interface
+    public interface OnItemClickListener {
+        void onItemClick(Item item);
     }
 }
+

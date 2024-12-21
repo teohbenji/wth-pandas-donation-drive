@@ -1,5 +1,6 @@
 package com.example.donation_drive_app.ui.catalogue;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,7 +47,17 @@ public class CatalogueFragment extends Fragment {
 
         itemsArrayList = new ArrayList<>();
         recyclerView = rootView.findViewById(R.id.recyclerViewItems);
-        catalogueAdapter = new CatalogueAdapter(getContext(), itemsArrayList);
+        catalogueAdapter = new CatalogueAdapter(getContext(), itemsArrayList, item -> {
+            // Navigate to item details page
+            Intent intent = new Intent(getContext(), ItemViewPage.class);
+            intent.putExtra("name", item.getName());
+            intent.putExtra("hostName", item.getHostName());
+            intent.putExtra("category", item.getCategory());
+            intent.putExtra("uploadTime", item.getUploadTime());
+            intent.putExtra("photoString", item.getPhotoString());
+            intent.putExtra("description", item.getDescription());
+            startActivity(intent);
+        });
         recyclerView.setAdapter(catalogueAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
