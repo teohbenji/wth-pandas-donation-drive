@@ -57,9 +57,6 @@ public class UploadDetails extends AppCompatActivity {
 
             // Set the rotated bitmap to the ImageView
             capturedImageView.setImageBitmap(rotatedBitmap);
-        } else {
-            // If the image path is null, you can set a placeholder or leave the ImageView empty
-            capturedImageView.setImageResource(R.drawable.kid_bicycle); // Replace with your placeholder
         }
 
         // Set up the back button

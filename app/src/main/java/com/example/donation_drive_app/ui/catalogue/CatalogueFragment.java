@@ -48,9 +48,10 @@ public class CatalogueFragment extends Fragment {
         itemsArrayList = new ArrayList<>();
         recyclerView = rootView.findViewById(R.id.recyclerViewItems);
         catalogueAdapter = new CatalogueAdapter(getContext(), itemsArrayList, item -> {
+            Log.d("CatalogueFragment", "Item id: " + item.getId());
             // Navigate to item details page
             Intent intent = new Intent(getContext(), ItemViewPage.class);
-            intent.putExtra("name", item.getName());
+                intent.putExtra("name", item.getName());
             intent.putExtra("hostName", item.getHostName());
             intent.putExtra("category", item.getCategory());
             intent.putExtra("uploadTime", item.getUploadTime());
