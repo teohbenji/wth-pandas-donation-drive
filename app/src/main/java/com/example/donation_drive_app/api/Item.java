@@ -3,24 +3,24 @@ package com.example.donation_drive_app.api;
 import java.util.Date;
 
 public class Item {
-    private int id;
+    private String id;
     private String name;
     private String hostName;
-    private String photoSource;
-    private Date uploadTime;
+    private String photoString;
+    private String uploadTime;
     private String category;
     private String description;
     private String status;
-    private int reservedUserId;
+    private String reservedUserId;
 
-    public Item(int id, String name, String hostName,
-                String photoSource, Date uploadTime,
+    public Item(String id, String name, String hostName,
+                String photoString, String uploadTime,
                 String category, String description,
-                String status, int reservedUserId) {
+                String status, String reservedUserId) {
         this.id = id;
         this.name = name;
         this.hostName = hostName;
-        this.photoSource = photoSource;
+        this.photoString = photoString;
         this.uploadTime = uploadTime;
         this.category = category;
         this.description = description;
@@ -28,7 +28,9 @@ public class Item {
         this.reservedUserId = reservedUserId;
     }
 
-    public int getId() {
+    public Item() {}
+
+    public String getId() {
         return id;
     }
 
@@ -40,11 +42,11 @@ public class Item {
         return name;
     }
 
-    public String getPhotoSource() {
-        return photoSource;
+    public String getPhotoString() {
+        return photoString;
     }
 
-    public Date getUploadTime() {
+    public String getUploadTime() {
         return uploadTime;
     }
 
@@ -60,7 +62,7 @@ public class Item {
         return status;
     }
 
-    public int getReservedUserId() {
+    public String getReservedUserId() {
         return reservedUserId;
     }
 }

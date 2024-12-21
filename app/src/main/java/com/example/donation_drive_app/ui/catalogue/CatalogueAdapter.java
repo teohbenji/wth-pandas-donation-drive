@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide;
 import com.example.donation_drive_app.R;
 import com.example.donation_drive_app.api.Item;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 
@@ -42,14 +41,13 @@ public class CatalogueAdapter extends RecyclerView.Adapter<CatalogueAdapter.View
         int index2 = index1 + 1;
 
         // Define the date format
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy");
 
         // Display first item
         Item item1 = itemsArrayList.get(index1);
         holder.textViewItem1Name.setText(item1.getName());
         holder.textViewItem1HostName.setText(item1.getHostName());
         holder.textViewItem1Category.setText(item1.getCategory());
-        holder.textViewItem1Date.setText(sdf.format(item1.getUploadTime()));
+        holder.textViewItem1Date.setText(item1.getUploadTime());
         Glide.with(context).load(R.drawable.kid_bicycle).into(holder.imageViewItem1);
         //later change to get directly from the backend url
 
@@ -59,7 +57,7 @@ public class CatalogueAdapter extends RecyclerView.Adapter<CatalogueAdapter.View
             holder.textViewItem2Name.setText(item2.getName());
             holder.textViewItem2HostName.setText(item2.getHostName());
             holder.textViewItem2Category.setText(item2.getCategory());
-            holder.textViewItem2Date.setText(sdf.format(item2.getUploadTime()));
+            holder.textViewItem2Date.setText(item2.getUploadTime());
             Glide.with(context).load(R.drawable.ipad).into(holder.imageViewItem2);
             //later change to get directly from the backendurl
         } else {
