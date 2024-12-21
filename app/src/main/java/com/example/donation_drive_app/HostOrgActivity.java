@@ -1,5 +1,6 @@
 package com.example.donation_drive_app;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,5 +30,14 @@ public class HostOrgActivity extends AppCompatActivity {
 
         // Set up the BottomNavigationView with the NavController
         NavigationUI.setupWithNavController(navView, navController);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent.getBooleanExtra("navigate_to_fragment", false)) {
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_host_org);
+            navController.navigate(R.id.navigation_upload); // Replace with your fragment ID
+        }
     }
 }
