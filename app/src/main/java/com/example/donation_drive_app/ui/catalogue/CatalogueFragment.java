@@ -98,7 +98,7 @@ public class CatalogueFragment extends Fragment {
 
                 for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
                     Item item = itemSnapshot.getValue(Item.class);
-                    if (item != null) {
+                    if (item != null && !item.getStatus().equals("removed")) {
                         itemsArrayList.add(item);
                     }
                 }
