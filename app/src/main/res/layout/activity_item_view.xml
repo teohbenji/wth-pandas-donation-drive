@@ -22,7 +22,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
-        android:src="@drawable/kid_bicycle"
         app:layout_constraintTop_toBottomOf="@id/backButton"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
