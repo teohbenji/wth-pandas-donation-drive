@@ -80,5 +80,9 @@ public class Item {
     public String getReservedUserId() {
         return reservedUserId;
     }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
 
