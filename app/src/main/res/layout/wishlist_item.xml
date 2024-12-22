@@ -78,7 +78,8 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_gravity="bottom"
-                android:background="@color/purple_200"
+                android:backgroundTint="#D8E5E7"
+                android:textColor="#000000"
                 android:src="@drawable/ic_wishlist"
                 android:contentDescription="Add to Wishlist" />
         </LinearLayout>
