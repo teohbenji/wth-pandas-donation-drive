@@ -7,8 +7,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +34,13 @@ import android.widget.Toast;
 
 import com.example.donation_drive_app.R;
 import com.example.donation_drive_app.databinding.FragmentUploadBinding;
+import okhttp3.MediaType;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -42,6 +50,13 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class UploadsFragment extends Fragment {
 
@@ -102,18 +117,19 @@ public class UploadsFragment extends Fragment {
         binding.nextButton.setOnClickListener(v -> {
 //            deleteTempFile();
 //            saveImage();
-            Intent intent = new Intent(getContext(), UploadDetails.class);
+//            Intent intent = new Intent(getContext(), UploadDetails.class);
             // Optionally, pass any data to the new activity
             if (capturedBitmap != null) {
                 File tempFile = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_image.jpg");
-                intent.putExtra("image_path", tempFile.getAbsolutePath());
+                uploadImageToFirebaseAndMove(tempFile);
+//                intent.putExtra("image_path", tempFile.getAbsolutePath());
             }
 
-            // Start the new activity
-            startActivity(intent);
-
-            // Optionally, finish the current activity if you no longer need the fragment
-            requireActivity().finish();
+//            // Start the new activity
+//            startActivity(intent);
+//
+//            // Optionally, finish the current activity if you no longer need the fragment
+//            requireActivity().finish();
         });
 
 
@@ -197,12 +213,11 @@ public class UploadsFragment extends Fragment {
     private void saveImage() {
         if (capturedBitmap != null) {
             // Get current time for filename
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-            File photoFile = new File(requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "captured_image_" + timeStamp + ".jpg");
+            File photoFile = new File(requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_image.jpg");
 
             try (FileOutputStream out = new FileOutputStream(photoFile)) {
                 capturedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                Toast.makeText(requireContext(), "Image saved: " + photoFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
+//                Toast.makeText(requireContext(), "Image saved: " + photoFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
 
                 // Hide captured image view and reset UI
                 binding.capturedImageView.setVisibility(View.INVISIBLE);
@@ -217,6 +232,151 @@ public class UploadsFragment extends Fragment {
                 Toast.makeText(requireContext(), "Failed to save image", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void uploadImageToFirebaseAndMove(File imageFile) {
+        if (imageFile != null) {
+            String filepath = "images/temp_image.jpg";
+            Uri fileUri = Uri.fromFile(imageFile);
+
+            StorageReference imageRef = FirebaseStorage.getInstance().getReference().child(filepath);
+
+            imageRef.putFile(fileUri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        // Firebase upload completed successfully
+                        if (isAdded()) { // Ensure fragment is still attached
+                            Toast.makeText(requireContext(), "Image Uploaded Successfully!", Toast.LENGTH_SHORT).show();
+                            // Now move to the next activity
+                            // Get the download URL after successful upload
+                            FirebaseStorage.getInstance().getReference(filepath)
+                                    .getDownloadUrl()
+                                    .addOnSuccessListener(uri -> {
+                                        // Make the HTTP request with the URI
+                                        makeHttpRequest(uri, imageFile);
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        // Handle failure to get the download URL
+                                        if (isAdded()) {
+                                            Toast.makeText(requireContext(), "Failed to get download URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        if (isAdded()) {
+                            Toast.makeText(requireContext(), "Upload Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            if (isAdded()) {
+                Toast.makeText(requireContext(), "No image to upload", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void makeHttpRequest(Uri imageUri, File imageFile) {
+        if (imageUri == null) {
+            if (isAdded()) {
+                Toast.makeText(requireContext(), "Image URI is null", Toast.LENGTH_SHORT).show();
+            }
+            return;
+        }
+
+        // Build the JSON request body
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("image_url", imageUri.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            if (isAdded()) {
+                Toast.makeText(requireContext(), "Failed to create JSON request body", Toast.LENGTH_SHORT).show();
+            }
+            return;
+        }
+
+        // Set up OkHttpClient
+        OkHttpClient client = new OkHttpClient();
+
+        // Create the request body
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody requestBody = RequestBody.create(JSON, jsonBody.toString());
+
+        // Build the HTTP request
+        Request request = new Request.Builder()
+                .url("https://analyze-image-service-112962837866.asia-east1.run.app/analyze-image") // Replace with your actual endpoint
+                .post(requestBody)
+                .build();
+
+        // Execute the HTTP request
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                // Handle HTTP request failure
+                requireActivity().runOnUiThread(() -> {
+                    if (isAdded()) {
+                        Toast.makeText(requireContext(), "HTTP Request Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
+                requireActivity().runOnUiThread(() -> {
+                    if (!isAdded()) return;
+
+                    try {
+                        if (response.isSuccessful()) {
+                            // Parse the JSON response
+                            String responseString = response.body().string();
+                            JSONObject jsonResponse = new JSONObject(responseString);
+
+                            // Extract data from the response
+                            String category = jsonResponse.optString("category", "");
+                            String description = jsonResponse.optString("description", "");
+                            String item = jsonResponse.optString("item", "");
+                            String quality = jsonResponse.optString("quality", "");
+
+                            // Display or use the extracted data
+                            requireActivity().runOnUiThread(() -> {
+                                // Move to the next activity
+                                moveToNextActivity(imageFile, category, description, item, quality);
+                            });
+                        } else {
+                            // Handle unsuccessful response
+                            String errorMessage = response.message();
+                            requireActivity().runOnUiThread(() -> {
+                                if (isAdded()) {
+                                    Toast.makeText(requireContext(), "Error: " + errorMessage, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    } catch (IOException | JSONException e) {
+                        // Handle parsing exceptions
+                        e.printStackTrace();
+                        requireActivity().runOnUiThread(() -> {
+                            if (isAdded()) {
+                                Toast.makeText(requireContext(), "Error processing response", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } finally {
+                        // Ensure response body is closed to prevent leaks
+                        response.close();
+                    }
+                });
+            }
+        });
+    }
+
+    private void moveToNextActivity(File imageFile, String category, String description, String item, String quality) {
+        Intent intent = new Intent(requireContext(), UploadDetails.class);
+        intent.putExtra("image_path", imageFile.getAbsolutePath());
+        // Pass the additional details
+        intent.putExtra("category", category);
+        intent.putExtra("description", description);
+        intent.putExtra("item", item);
+        intent.putExtra("quality", quality);
+        startActivity(intent);
+        requireActivity().finish();
     }
 
     private Bitmap rotateBitmap(Bitmap bitmap, int orientation) {
