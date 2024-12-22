@@ -1,73 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
-    <Button
-        android:id="@+id/backarrow"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="@+id/nameEditText"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/baseline_arrow_back_24"/>
-    <!-- Display captured image -->
-    <ImageView
-        android:id="@+id/myImageView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/backarrow"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        android:layout_margin="16dp"/>
-
-    <!-- Name input field -->
-    <EditText
-        android:id="@+id/nameEditText"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/myImageView"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:hint="Name"
-        android:layout_margin="10dp"/>
+        android:padding="16dp">
 
-    <!-- Category input field -->
-    <EditText
-        android:id="@id/categoryEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/nameEditText"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:hint="Category"
-        android:layout_margin="10dp"/>
+        <!-- Back arrow button -->
+        <Button
+            android:id="@+id/backarrow"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="@+id/nameEditText"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/baseline_arrow_back_24" />
 
-    <!-- Description input field -->
-    <EditText
-        android:id="@+id/descriptionEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/categoryEditText"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:hint="Description"
-        android:layout_margin="10dp"/>
+        <!-- Display captured image -->
+        <ImageView
+            android:id="@+id/myImageView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/backarrow" />
 
-    <!-- Confirm button -->
-    <Button
-        android:id="@+id/confirmButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#D3D3D3"
-        android:textColor="#000000"
-        app:layout_constraintTop_toBottomOf="@id/descriptionEditText"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:text="Confirm"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Name header -->
+        <TextView
+            android:id="@+id/nameHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/nameEditText"
+            app:layout_constraintTop_toBottomOf="@id/myImageView" />
+        <!-- Name input field -->
+        <EditText
+            android:id="@+id/nameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:hint="Name"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/myImageView" />
+
+        <!-- Category header -->
+        <TextView
+            android:id="@+id/categoryHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Category"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/categoryEditText"
+            app:layout_constraintTop_toBottomOf="@id/nameEditText" />
+        <!-- Category input field -->
+        <EditText
+            android:id="@id/categoryEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:hint="Category"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nameEditText" />
+
+        <!-- Category header -->
+        <TextView
+            android:id="@+id/qualityHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quality"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/qualityEditText"
+            app:layout_constraintTop_toBottomOf="@id/categoryEditText" />
+        <!-- Category input field -->
+        <EditText
+            android:id="@+id/qualityEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:hint="Quality"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/categoryEditText" />
+
+        <!-- Description header -->
+        <TextView
+            android:id="@+id/descriptionHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/descriptionEditText"
+            app:layout_constraintTop_toBottomOf="@id/qualityEditText" />
+        <!-- Description input field -->
+        <EditText
+            android:id="@+id/descriptionEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:hint="Description"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/qualityEditText" />
+
+        <!-- Confirm button -->
+        <Button
+            android:id="@+id/confirmButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#D3D3D3"
+            android:text="Confirm"
+            android:textColor="#000000"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/descriptionEditText" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -41,6 +41,10 @@ public class UploadDetails extends AppCompatActivity {
 
         // Handle receiving data from the previous fragment if needed
         String imagePath = getIntent().getStringExtra("image_path"); // Example of passing data
+        String category = getIntent().getStringExtra("category"); // Example of passing data
+        String description = getIntent().getStringExtra("description"); // Example of passing data
+        String item = getIntent().getStringExtra("item"); // Example of passing data
+        String quality = getIntent().getStringExtra("quality"); // Example of passing data
 
         // Find the ImageView
         ImageView capturedImageView = findViewById(R.id.myImageView);
@@ -69,7 +73,13 @@ public class UploadDetails extends AppCompatActivity {
 
         final TextView nameEditText = findViewById(R.id.nameEditText);
         final TextView categoryEditText = findViewById(R.id.categoryEditText);
+        final TextView qualityEditText = findViewById(R.id.qualityEditText);
         final TextView descriptionEditText = findViewById(R.id.descriptionEditText);
+
+        nameEditText.setText(item);
+        categoryEditText.setText(category);
+        qualityEditText.setText(quality);
+        descriptionEditText.setText(description);
 
         // Set up the confirm button
         findViewById(R.id.confirmButton).setOnClickListener(view -> {
