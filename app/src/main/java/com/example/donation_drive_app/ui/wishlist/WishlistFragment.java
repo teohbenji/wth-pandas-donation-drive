@@ -1,25 +1,19 @@
 package com.example.donation_drive_app.ui.wishlist;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.donation_drive_app.LoginActivity;
 import com.example.donation_drive_app.R;
-import com.example.donation_drive_app.UserActivity;
 import com.example.donation_drive_app.api.Item;
-import com.example.donation_drive_app.ui.catalogue.ItemViewPage;
-import com.example.donation_drive_app.ui.home.UserAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class WishlistFragment extends Fragment {
 
@@ -36,6 +31,35 @@ public class WishlistFragment extends Fragment {
     private RecyclerView recyclerView;
     private WishlistAdapter wishlistAdapter;
     private String currentUserId; // Replace this with the actual user ID logic
+
+    private ArrayList<String> fullNamesArrayList = new ArrayList<>(Arrays.asList(
+            "Jane Lim Mei Ling",
+            "Bryan Goh Choon Seng",
+            "Ng Hui Min",
+            "Chong Wei Kiat",
+            "Lee Hwee Ling",
+            "David Teo Zhi Hao",
+            "Wong Kai Ming",
+            "Tan Siew Ling",
+            "Ahmad Faris",
+            "Nurul Huda",
+            "Aisyah Binte Rahman",
+            "Hafiz Bin Abdullah",
+            "Syafiqah Binte Mohamad",
+            "Fahmi Bin Rosli",
+            "Nurul Aina",
+            "Zulkifli Bin Hassan",
+            "Aminah Binte Salleh",
+            "Hakim Bin Abdul Rahim",
+            "Siti Nurhaliza",
+            "Rajesh Kumar",
+            "Priya Subramaniam",
+            "Vijay Anand",
+            "Lakshmi Narayanan",
+            "Arun Prakash",
+            "Deepa Krishnan",
+            "Ravi Chandran"
+    ));
 
     public WishlistFragment() {
     }
@@ -110,7 +134,7 @@ public class WishlistFragment extends Fragment {
             checkoutItemNames.add(item.getName()); // Assuming getName() returns the item's name
         }
 
-        // Now loop through the names and update the items' status to "removed"
+        //update the items' status to "reserved"
         for (String name : checkoutItemNames) {
             itemsRef.orderByChild("name").equalTo(name).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -118,8 +142,12 @@ public class WishlistFragment extends Fragment {
                     for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
                         Item item = itemSnapshot.getValue(Item.class);
                         if (item != null) {
-                            // Update the status to "removed"
-                            item.setStatus("removed");
+                            // Update the status to "reserved"
+                            item.setStatus("reserved");
+
+                            String randomUserId = fullNamesArrayList.get((int) (Math.random() * fullNamesArrayList.size()));
+                            item.setReservedUserId(randomUserId);
+
                             // Update the item in the database
                             itemSnapshot.getRef().setValue(item);
                         }

@@ -84,5 +84,8 @@ public class Item {
     public void setStatus(String status) {
         this.status = status;
     }
+    public void setReservedUserId(String reservedUserId) {
+        this.reservedUserId = reservedUserId;
+    }
 }
 
