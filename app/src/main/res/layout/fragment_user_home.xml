@@ -54,7 +54,8 @@
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:text="Clothes"
-            android:backgroundTint="#D3D3D3"
+            android:textStyle="bold"
+            android:backgroundTint="#D8E5E7"
             android:textColor="#000000"
             android:textAllCaps="false" />
 
@@ -66,9 +67,10 @@
             android:layout_margin="8dp"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
-            android:text="Books"        android:backgroundTint="#D3D3D3"
+            android:text="Books"
+            android:textStyle="bold"
+            android:backgroundTint="#D8E5E7"
             android:textColor="#000000"
-
             android:textAllCaps="false" />
 
         <!-- Toys Button -->
@@ -80,7 +82,8 @@
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:text="Toys"
-            android:backgroundTint="#D3D3D3"
+            android:textStyle="bold"
+            android:backgroundTint="#D8E5E7"
             android:textColor="#000000"
             android:textAllCaps="false" />
 
@@ -93,7 +96,8 @@
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:text="Stationery"
-            android:backgroundTint="#D3D3D3"
+            android:textStyle="bold"
+            android:backgroundTint="#D8E5E7"
             android:textColor="#000000"
             android:textAllCaps="false" />
     </GridLayout>
@@ -106,7 +110,7 @@
         android:layout_marginStart="24dp"
         android:text="Recommendations based on your Profile"
         android:textColor="@color/black"
-        android:textSize="15dp"
+        android:textSize="16dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/category_grid" />
