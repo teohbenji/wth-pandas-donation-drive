@@ -60,9 +60,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
         android:text="This is text 2"
-        app:layout_constraintHorizontal_bias="0.15"
         app:layout_constraintLeft_toRightOf="@id/textView1"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textViewItemUploadDate"
         app:layout_constraintTop_toBottomOf="@id/textViewItemName" />
 
     <!-- Text view for category-->
@@ -85,9 +85,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="Sports Equipment"
-        app:layout_constraintHorizontal_bias="0.418"
         app:layout_constraintLeft_toRightOf="@id/textView2"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textViewItemUploadDate"
         app:layout_constraintTop_toBottomOf="@id/textView1" />
 
     <!-- Text view for upload date-->
@@ -135,9 +135,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="Good condition"
-        app:layout_constraintHorizontal_bias="0.34"
         app:layout_constraintLeft_toRightOf="@id/textView4"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textViewItemUploadDate"
         app:layout_constraintTop_toBottomOf="@id/textView3" />
 
     <Button
